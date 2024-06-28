@@ -1,0 +1,44 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled: 'true'
+      show-details: always
+  info:
+    env:
+      enabled: 'true'
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+  application:
+    name: department-service
+  datasource:
+    password: 'r00t'
+    username: root
+    url: jdbc:mysql://localhost:3306/department_db
+  boot:
+    message: 'Department Service config server...'
+  rabbitmq:
+    host: localhost
+    port: 3306
+    username: guest
+    password: guest
+    
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    enabled: 'true'
+  instance:
+    appname: department-service
+server:
+  port: '8080'

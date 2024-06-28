@@ -1,0 +1,66 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled: 'true'
+      show-details: always
+    circuitbreakers:
+      enabled: 'true'
+  info:
+    env:
+      enabled: 'true'
+spring:
+  boot:
+    message: 'Employee services config server....'
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        '[format_sql]': 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+  application:
+    name: employee-service
+  datasource:
+    password: 'r00t'
+    username: root
+    url: jdbc:mysql://localhost:1433;databaseName=employee_db;encrypt=true;trustServerCertificate=true
+  rabbitmq:
+    host: localhost
+    port: 3306
+    username: guest
+    password: guest
+    
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    enabled: 'true'
+  instance:
+    appname: employee-service
+    
+resilience4j:
+  circuitbreaker:
+    instances:
+      employee-service:
+        register-health-indicator: true
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        automatic-transition-from-open-to-half-open-enabled: true
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        sliding-window-size: 10
+        sliding-window-type: COUNT_BASED
+
+  retry:
+    instances:
+      employee-service:
+        max-attempts: 3
+        wait-duration: 2s
+        
+server:
+  port: '8081'
